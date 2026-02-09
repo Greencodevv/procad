@@ -1,0 +1,38 @@
+<ion-content class="lojas-content">
+  <div class="lojas-container">
+    <div class="page-header">
+      <div class="header-content">
+        <h1 class="page-title">Visitas</h1>
+        <ion-badge color="primary" class="count-badge">{{ visitas?.length || 0 }}</ion-badge>
+      </div>
+      <p class="page-subtitle">Gerencie suas visitas</p>
+    </div>
+
+    @if (visitas && visitas.length > 0) {
+    <ion-list class="lojas-list" lines="none">
+      @for (visita of visitas; track visita.codigo) {
+      <ion-item (click)="abrirDetalhe(visita)" button="true" class="loja-item">
+        <div class="loja-icon-wrapper" slot="start">
+          <ion-icon name="storefront-outline" class="loja-icon"></ion-icon>
+        </div>
+        <ion-label class="loja-content">
+          <h2 class="loja-name">{{ visita.visitado.nome }}</h2>
+          <div class="loja-details">
+            <p class="loja-address">
+              <ion-icon name="location-outline" class="detail-icon"></ion-icon>
+              {{ visita.visitado.endereco }}
+            </p>
+            @if (visita.visitado.bairro) {
+            <p class="loja-email">
+              <ion-icon name="mail-outline" class="detail-icon"></ion-icon>
+              {{ visita.visitado.bairro }}
+            </p>
+            }
+          </div>
+        </ion-label>
+      </ion-item>
+      }
+    </ion-list>
+    }
+  </div>
+</ion-content>

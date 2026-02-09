@@ -1,0 +1,7 @@
+{
+  "name": "Procad",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

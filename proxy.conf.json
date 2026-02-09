@@ -1,0 +1,7 @@
+{
+  "/assistenciaSocial/jsp/uploadArquivoProcad.jsp": {
+    "target": "https://camaragibe.conectasuas.com.br",
+    "secure": false,
+    "changeOrigin": true
+  }
+}

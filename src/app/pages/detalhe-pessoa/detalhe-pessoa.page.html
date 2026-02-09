@@ -1,0 +1,39 @@
+<ion-content class="lojas-content">
+    <div class="lojas-container">
+        <div class="page-header">
+            <div class="header-content">
+                <h1 class="page-title">{{objVisita.visitado.nome}}</h1>
+            </div>
+            <p class="page-subtitle">Preencha as informações da visita</p>
+        </div>
+
+        <ion-label class="loja-content">
+            <ion-input [(ngModel)]="objVisita.obs" placeholder="Informações adicionais..."></ion-input>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 12px;">
+                <ion-label style="margin-right: 8px;">Visita realizada</ion-label>
+                <ion-checkbox slot="end" [(ngModel)]="objVisita.flagConcluido"></ion-checkbox>
+            </div>
+        </ion-label>
+
+        <ion-list *ngIf="filesArr.length > 0" style="margin-top: 24px;">
+            <ion-item *ngFor="let file of filesArr">
+                <img [src]="file.base64" alt="Foto" style="max-width: 150px; max-height: 150px; border-radius: 8px;" />
+            </ion-item>
+        </ion-list>
+
+        <ion-row style="margin-top: 24px; gap: 12px;">
+            <ion-col size="12">
+                <ion-button *ngIf="filesArr.length == 0" style="width: 50%; display: flex; margin-inline: auto;" expand="block" color="primary"
+                    (click)="handleOpenCamera('foto_procad')">
+                    <ion-icon slot="start" name="camera-outline"></ion-icon>
+                    Adicionar Foto
+                </ion-button>
+                <ion-button *ngIf="filesArr.length > 0" style="width: 50%; display: flex; margin-inline: auto;" expand="block" color="primary"
+                    (click)="finalizarVisita()">
+                    <ion-icon slot="start" name="checkmark-circle-outline"></ion-icon>
+                    Salvar Visita
+                </ion-button>
+            </ion-col>
+        </ion-row>
+    </div>
+</ion-content>
