@@ -15,15 +15,22 @@ export class InicioPage {
 
   async ionViewDidEnter() {
     const retornoJsp: any = Mentor.bind(
-        'codigoEntrevistador=' + servico.usuarioLogado.codigo,
-        'jsp/appProcad/ctrl.jsp',
-        'POST'
-      );
+      'codigoEntrevistador=' + servico.usuarioLogado.codigo,
+      'jsp/appProcad/ctrl.jsp',
+      'POST'
+    );
     const objJsp = JSON.parse(retornoJsp);
     this.visitas = JSON.parse(objJsp['visitas']);
   }
 
   abrirDetalhe(visitaSelecionada: any) {
+    console.log('objVisita', visitaSelecionada);
+    if (visitaSelecionada.obs == "null") {
+      console.log('objVisita', visitaSelecionada);
+      visitaSelecionada.obs = '';
+      console.log('objVisita', visitaSelecionada);
+    }
+    console.log('objVisita', visitaSelecionada);
     servico.visita = visitaSelecionada;
     this.router.navigate(['/detalhe-pessoa']);
   }
