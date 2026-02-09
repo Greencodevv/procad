@@ -74,14 +74,14 @@ export class DetalhePessoaPage {
             this.filesArr.push(artefato);
 
             const arquivo = new ArquivoProcad(null);
-            arquivo.nome = documentName + new Date().getTime();
+            arquivo.nome = documentName + "_" + this.objVisita.visitado.nome;
             arquivo.flagUploadArquivo = 1;
-            
+
 
             const arquivoUpado = Mentor.rodaTransacaoFromObjeto(2007, 'objArquivo', arquivo, true);
             console.log('arquivoUpado', arquivoUpado['ArquivoProcad']);
             this.arquivo = arquivoUpado['ArquivoProcad'];
-
+            this.codigoArquivo = arquivoUpado['ArquivoProcad'].codigo;
 
             const file = await this.photoToFile(cameraResults);
 
@@ -92,7 +92,7 @@ export class DetalhePessoaPage {
             formData.append('classe', 'br.com.assistenciaSocial.beans.ArquivoProcad');
             formData.append('tipo', 'Arquivo');
             formData.append('id', String(this.codigoArquivo));
-            formData.append('codigo', String(this.codigoArquivo));
+            formData.append('codigo', String(this.usuarioLogado.codigo));
             formData.append('parametrosExtra', '');
             formData.append('arquivo', file);
 
@@ -100,7 +100,7 @@ export class DetalhePessoaPage {
 
             xhr.open(
                 'POST',
-                'https://camaragibe.conectasuas.com.br/assistenciaSocial/jsp/uploadArquivoProcad.jsp',
+                'https://camaragibe.conectasuas.com.br/assistenciaSocial/uploadProcad',
                 true
             );
 
@@ -143,7 +143,7 @@ export class DetalhePessoaPage {
 
         return new File(
             [blob],
-            this.arquivos[0].nome.toString(),
+            this.arquivo.nome.toString(),
             { type: 'image/jpeg' }
         );
     }
