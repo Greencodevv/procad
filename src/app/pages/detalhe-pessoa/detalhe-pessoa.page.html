@@ -16,8 +16,8 @@
         </ion-label>
 
         <ion-list *ngIf="filesArr.length > 0" style="margin-top: 24px;">
-            <ion-item *ngFor="let file of filesArr">
-                <img [src]="file.base64" alt="Foto" style="max-width: 150px; max-height: 150px; border-radius: 8px;" />
+            <ion-item *ngFor="let file of filesArr" lines="none">
+                <img [src]="file.base64" alt="Foto" style="max-width: 100%; max-height: 100%; border-radius: 20px;" />
             </ion-item>
         </ion-list>
 

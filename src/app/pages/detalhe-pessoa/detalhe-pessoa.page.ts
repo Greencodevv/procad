@@ -37,6 +37,7 @@ export class DetalhePessoaPage {
     }
 
     async finalizarVisita() {
+        await this.loadingService.present();
         const recadastrado = this.objVisita.visitado;
         recadastrado.flagRecadastrado = 1;
         const pessoa = new RecadastramentoCamaragibe(recadastrado);
@@ -49,6 +50,7 @@ export class DetalhePessoaPage {
         pessoa.visitas.push(visita);
 
         const recadastramento = Mentor.rodaTransacaoFromObjeto(2003, 'objRecadastramento', pessoa, true);
+        this.loadingService.dismiss();
         if (recadastramento) { 
             this.toastService.showToast({message: 'Visita finalizada com sucesso!'});
             this.router.navigate(['/inicio']);
