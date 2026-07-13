@@ -1,6 +1,7 @@
 <ion-content class="lojas-content">
+    <ion-icon (click)="goBack()" class="return" style="color: white;" name="arrow-back-circle-outline"></ion-icon>
     <div class="lojas-container">
-        <div class="page-header">
+        <div class="page-header" style="display: flex;flex-direction: column;align-items: center;">
             <div class="header-content">
                 <h1 class="page-title">{{objVisita.visitado.nome}}</h1>
             </div>
@@ -9,10 +10,10 @@
 
         <ion-label class="loja-content">
             <ion-input [(ngModel)]="objVisita.obs" placeholder="Informações adicionais..."></ion-input>
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 12px;">
-                <ion-label style="margin-right: 8px;">Visita realizada</ion-label>
-                <ion-checkbox slot="end" [(ngModel)]="objVisita.flagConcluido"></ion-checkbox>
-            </div>
+            <ion-select labelPlacement="stacked" placeholder="Status da visita" [(ngModel)]="objVisita.flagConcluido">
+                <ion-select-option *ngFor="let status of listaStatus"
+                    [value]="status.de">{{status.para}}</ion-select-option>
+            </ion-select>
         </ion-label>
 
         <ion-list *ngIf="filesArr.length > 0" style="margin-top: 24px;">
@@ -23,17 +24,20 @@
 
         <ion-row style="margin-top: 24px; gap: 12px;">
             <ion-col size="12">
-                <ion-button *ngIf="filesArr.length == 0" style="width: 50%; display: flex; margin-inline: auto;" expand="block" color="primary"
-                    (click)="handleOpenCamera('foto_procad')">
+                <ion-button *ngIf="filesArr.length == 0" style="width: 50%; display: flex; margin-inline: auto;"
+                    expand="block" color="primary" (click)="handleOpenCamera('foto_procad')">
                     <ion-icon slot="start" name="camera-outline"></ion-icon>
                     Adicionar Foto
                 </ion-button>
-                <ion-button *ngIf="filesArr.length > 0" style="width: 50%; display: flex; margin-inline: auto;" expand="block" color="primary"
-                    (click)="finalizarVisita()">
+                <ion-button *ngIf="filesArr.length > 0" style="width: 50%; display: flex; margin-inline: auto;"
+                    expand="block" color="primary" (click)="finalizarVisita()">
                     <ion-icon slot="start" name="checkmark-circle-outline"></ion-icon>
                     Salvar Visita
                 </ion-button>
             </ion-col>
         </ion-row>
+    </div>
+    <div class="footer-content">
+        <img src="../../../assets/icon/1.jpeg" alt="Footer Illustration" style="width: 100%; max-width: 120px; display: block; margin: 0 auto;"/>
     </div>
 </ion-content>

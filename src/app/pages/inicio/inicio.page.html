@@ -18,14 +18,20 @@
         <ion-label class="loja-content">
           <h2 class="loja-name">{{ visita.visitado.nome }}</h2>
           <div class="loja-details">
-            <p class="loja-address">
-              <ion-icon name="location-outline" class="detail-icon"></ion-icon>
+            <p class="loja-address" style="display: contents;">
+              <strong>Endereço</strong>
+              <!-- <ion-icon name="location-outline" class="detail-icon"></ion-icon> -->
               {{ visita.visitado.endereco }}
             </p>
-            @if (visita.visitado.bairro) {
+            <p class="loja-address" style="display: contents;">
+              <strong>Ponto de Referência</strong>
+              <!-- <ion-icon name="location-outline" class="detail-icon"></ion-icon> -->
+              {{ visita.visitado.pontoReferencia }}
+            </p>
+            @if (visita.visitado.bairroSistema) {
             <p class="loja-email">
               <ion-icon name="mail-outline" class="detail-icon"></ion-icon>
-              {{ visita.visitado.bairro }}
+              {{ visita.visitado.bairroSistema.nome }}
             </p>
             }
           </div>
@@ -33,6 +39,19 @@
       </ion-item>
       }
     </ion-list>
+    } @else {
+    <div style="gap: 20px;" class="empty-state">
+      <ion-icon name="sad-outline" class="empty-icon"></ion-icon>
+      <p class="empty-text">Nenhuma visita encontrada</p>
+      <ion-button style="width: 100%;" expand="block" color="primary" type="submit" (click)="navegaParaLogin()">
+        <ion-icon slot="start" name="log-out-outline"></ion-icon>
+        Deslogar
+      </ion-button>
+    </div>
     }
+  </div>
+  <div class="footer-content">
+    <img src="../../../assets/icon/1.jpeg" alt="Footer Illustration"
+      style="width: 100%; max-width: 120px; display: block; margin: 0 auto;" />
   </div>
 </ion-content>

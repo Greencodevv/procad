@@ -71,7 +71,6 @@ export class SelecionaMunicipioPage implements OnInit {
       Mentor.UrlRequest = 'https://treinamento.conectasuas.com.br/assistenciaSocial/';
       await this.loadingService.present();
       this.listaEstado = Mentor.executaVisao(314, '');
-      console.log(this.listaEstado);
     } catch (error) {
       this.toastService.showToast({ message: error, cssClass: 'toast-error' });
     } finally {

@@ -13,6 +13,7 @@ export class servico {
     static escolas: any[] = null;
     static estadoCivil: any[] = null;
     static racas: any[] = null;
+    static listaSituacao: any[] = null;
     static recadastramento: RecadastramentoCamaragibe = null;
     static visita: VisitaRecadastramento = null;
     static arquivos: ArquivoProcad[] = [];

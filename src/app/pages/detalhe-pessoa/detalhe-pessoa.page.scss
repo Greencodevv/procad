@@ -8,6 +8,25 @@ ion-content {
   --background: #f5f7fa;
 }
 
+.return {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    margin-left: 2%;
+    margin-top: 2rem;
+}
+
+.footer-content {
+  bottom: 0;
+  width: 100%;
+  position: fixed;
+  justify-content: center;
+  display: flex;
+  height: 120px;
+  align-items: center;
+  background: #f5f7fa;
+}
+
 ion-card {
   margin: 24px;
   border-radius: 16px;
@@ -29,7 +48,7 @@ ion-card-content p {
   --padding-start: 0;
   --padding-end: 0;
   --padding-top: 0;
-  --padding-bottom: 80px;
+  --padding-bottom: 130px;
   padding: 10px;
 }
 
@@ -54,10 +73,10 @@ ion-card-content p {
 }
 
 .page-title {
-  font-size: 1.75rem;
   font-weight: 700;
   color: #ffffff;
   margin: 0;
+  text-align: center;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -69,7 +88,7 @@ ion-card-content p {
 }
 
 .page-subtitle {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   color: rgba(255, 255, 255, 0.9);
   margin: 0;
   font-weight: 400;

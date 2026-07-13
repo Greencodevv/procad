@@ -1,5 +1,6 @@
 .container {
-  position: relative; /* Necessário para o pseudo-elemento */
+  position: relative;
+  /* Necessário para o pseudo-elemento */
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -9,7 +10,7 @@
   background-repeat: no-repeat;
   background-position: center;
   padding: 0 20px 40px;
-  
+
   ion-row {
     align-self: center;
 
@@ -19,6 +20,7 @@
       border-radius: 20px;
     }
   }
+
   form {
     ion-button {
       margin-top: 60px;
@@ -30,6 +32,7 @@
       border-radius: 8px;
       text-align: center;
     }
+
     ion-input:last-of-type {
       margin-top: 10px;
     }
@@ -43,18 +46,33 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(to top, rgba(0, 113, 187, 0.5), rgba(79, 159, 201, 0.5)); /* Ajuste as cores e opacidade conforme necessário */
-  z-index: 1; /* Coloca a sobreposição sobre a imagem de fundo */
+  background: linear-gradient(to top, rgba(0, 113, 187, 0.5), rgba(79, 159, 201, 0.5));
+  /* Ajuste as cores e opacidade conforme necessário */
+  z-index: 1;
+  /* Coloca a sobreposição sobre a imagem de fundo */
 }
 
-.container > * {
-  position: relative; /* Garante que os filhos diretos do contêiner estejam acima da sobreposição */
-  z-index: 2; /* Garante que o conteúdo esteja na frente da sobreposição */
+.container>* {
+  position: relative;
+  /* Garante que os filhos diretos do contêiner estejam acima da sobreposição */
+  z-index: 2;
+  /* Garante que o conteúdo esteja na frente da sobreposição */
 }
 
 .botoes {
   width: 100%;
   display: flex;
+}
+
+.footer-content {
+  bottom: 0;
+  width: 100%;
+  position: fixed;
+  justify-content: center;
+  display: flex;
+  height: 120px;
+  align-items: center;
+  background: #f5f7fa;
 }
 
 .troca {

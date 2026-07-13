@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera';
-import { StorageKeysEnums } from 'src/app/enums/StorageKeys.enums';
 import { ToastService } from 'src/app/shared/services/toast/toast.service';
 import { Mentor } from 'src/app/models/Mentor';
 import { ArquivoProcad, ArtefatoCras, RecadastramentoCamaragibe, VisitaRecadastramento } from 'src/app/models/Modelo';
@@ -16,6 +15,7 @@ import { Geolocation } from '@capacitor/geolocation';
 })
 export class DetalhePessoaPage {
     objVisita = servico.visita
+    listaStatus = new VisitaRecadastramento(null).flagConcluidoFormatadoLista;
     usuarioLogado = servico.usuarioLogado
     arquivo = servico.arquivo;
     arquivos = [];
@@ -39,21 +39,24 @@ export class DetalhePessoaPage {
     async finalizarVisita() {
         await this.loadingService.present();
         const recadastrado = this.objVisita.visitado;
-        recadastrado.flagRecadastrado = 1;
-        const pessoa = new RecadastramentoCamaragibe(recadastrado);
-
         const visita = new VisitaRecadastramento(this.objVisita);
         visita.responsavelVisita = this.usuarioLogado;
-        visita.flagConcluido = 1;
+        visita.flagConcluido = this.objVisita.flagConcluido;
+        recadastrado.flagRecadastrado = this.objVisita.flagConcluido;
         visita.arquivos = [this.arquivo];
-
+        const pessoa = new RecadastramentoCamaragibe(recadastrado);
         pessoa.visitas.push(visita);
 
-        const recadastramento = Mentor.rodaTransacaoFromObjeto(2003, 'objRecadastramento', pessoa, true);
-        this.loadingService.dismiss();
-        if (recadastramento) { 
-            this.toastService.showToast({message: 'Visita finalizada com sucesso!'});
-            this.router.navigate(['/inicio']);
+        if (visita.flagConcluido != 3) {
+            const recadastramento = Mentor.rodaTransacaoFromObjeto(2003, 'objRecadastramento', pessoa, true);
+            this.loadingService.dismiss();
+            if (recadastramento) {
+                this.toastService.showToast({ message: 'Visita finalizada com sucesso!' });
+                this.router.navigate(['/inicio']);
+            }
+        } else {
+            this.loadingService.dismiss();
+            this.toastService.showToast({ message: 'Status da visita é obrigatório' });
         }
     }
 
@@ -75,10 +78,9 @@ export class DetalhePessoaPage {
             const arquivo = new ArquivoProcad(null);
             arquivo.nome = documentName + "_" + this.objVisita.visitado.nome;
             arquivo.flagUploadArquivo = 1;
-            
+
 
             const arquivoUpado = Mentor.rodaTransacaoFromObjeto(2007, 'objArquivo', arquivo, true);
-            console.log('arquivoUpado', arquivoUpado['ArquivoProcad']);
             this.arquivo = arquivoUpado['ArquivoProcad'];
             this.codigoArquivo = arquivoUpado['ArquivoProcad'].codigo;
 
@@ -132,6 +134,11 @@ export class DetalhePessoaPage {
         }
 
         return new Blob(byteArrays, { type: contentType });
+    }
+
+    goBack() {
+        this.objVisita = null;
+        this.router.navigate(['/inicio']);
     }
 
 

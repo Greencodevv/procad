@@ -970,6 +970,7 @@ public static mentorNomeClasse = 'br.com.assistenciaSocial.beans.Recadastramento
 		get flagRecadastradoFormatado(){  return Mentor.formatadoLista(this.flagRecadastradoFormatadoLista,this.flagRecadastrado);}
 
 		public visitas : VisitaRecadastramento[] ;
+		public bairroSistema : Bairro ;
 
 public listaAtributosKodefy: Array<string> ='codigo#nome#cpf#endereco#bairro#pontoReferencia#telefone#obs#cras#flagRecadastrado#'.split('#');
 		constructor(objeto:any){
@@ -998,6 +999,8 @@ this.nomeApp = objeto.nomeApp;
 				this.visitas.push(new VisitaRecadastramento(objeto.visitas[x]))
 			}
 
+			if(objeto.bairroSistema != null)
+				this.bairroSistema = new Bairro(objeto.bairroSistema);
 		}
 		else{
 		if((objeto) == 'null'){
@@ -1017,6 +1020,7 @@ this.ionicFlagNovo = true;
 			 this.cras_ = '0';
 			 this.flagRecadastrado = 0;
 			 this.flagRecadastrado_ = '0';
+				this.bairroSistema = new Bairro('null');
 
 		}
 			}
@@ -1024,12 +1028,16 @@ this.ionicFlagNovo = true;
 			this.crasFormatadoLista.push(new formatadoLista(1,"CRAS 1"));
 			this.crasFormatadoLista.push(new formatadoLista(2,"CRAS 2"));
 			this.crasFormatadoLista.push(new formatadoLista(3,"CRAS 3"));
-			this.flagRecadastradoFormatadoLista.push(new formatadoLista(0,"Não"));
-			this.flagRecadastradoFormatadoLista.push(new formatadoLista(1,"Sim"));
+			this.flagRecadastradoFormatadoLista.push(new formatadoLista(0,"Não atendido"));
+			this.flagRecadastradoFormatadoLista.push(new formatadoLista(1,"Atendido"));
+			this.flagRecadastradoFormatadoLista.push(new formatadoLista(2,"Negada"));
+			this.flagRecadastradoFormatadoLista.push(new formatadoLista(3,"Sem agendamento"));
+			this.flagRecadastradoFormatadoLista.push(new formatadoLista(4,"Agendado"));
 
 		}
 
 }
+
 
 export class VisitaRecadastramento extends ionicClasseBase {
 public static mentorNomeClasse = 'br.com.assistenciaSocial.beans.VisitaRecadastramento';
@@ -1159,8 +1167,9 @@ this.ionicFlagNovo = true;
 		}
 			}
 
-			this.flagConcluidoFormatadoLista.push(new formatadoLista(0,"Não"));
-			this.flagConcluidoFormatadoLista.push(new formatadoLista(1,"Sim"));
+			this.flagConcluidoFormatadoLista.push(new formatadoLista(0,"Não realizada"));
+			this.flagConcluidoFormatadoLista.push(new formatadoLista(1,"Realizada"));
+			this.flagConcluidoFormatadoLista.push(new formatadoLista(2,"Negada"));
 
 		}
 
@@ -1241,4 +1250,63 @@ this.ionicFlagNovo = true;
 
 }
 
+
+export class Bairro extends ionicClasseBase {
+public static mentorNomeClasse = 'br.com.acesso.beans.Bairro';
+
+	static criaColecao(lista: any){
+		if(lista!=null){
+			var retorno = new Array();
+			for(let x = 0;x<lista.length;x++)
+				retorno.push(new Bairro(lista[x]));
+			return retorno;
+		}
+	}
+
+		public codigo : number = 0 ;
+		public codigo_ : String ;
+		get codigoSimNao(){ if (this.codigo == 1) return true; else return false;}
+		set codigoSimNao(flag){ if (flag) this.codigo = 1; else this.codigo = 0;}
+		get codigoFormatado(): String {
+			return (this.codigo_)
+		}
+		set codigoFormatado(valor: String) {
+			this.codigo_ =  (valor);
+			if(replaceAll(valor," ","") != "")
+				this.codigo =  Mentor.stringToMoeda(valor);
+		}
+
+		public nome : String = '' ;
+		public nome_ : String ;
+
+public listaAtributosKodefy: Array<string> ='codigo#nome#'.split('#');
+		constructor(objeto:any){
+		super();
+		if(objeto != null && objeto != 'null'){
+if(typeof(objeto.ionicFlagNovo) == 'undefined') this.ionicFlagNovo = false; else this.ionicFlagNovo = objeto.ionicFlagNovo;
+this.idApp = objeto.idApp;
+this.nomeApp = objeto.nomeApp;
+			 this.codigo = objeto.codigo;
+			 this.codigo_ = Mentor.intToString(this.codigo);
+			 this.nome = objeto.nome;
+
+		}
+		else{
+		if((objeto) == 'null'){
+this.ionicFlagNovo = true;
+			 this.codigo = 0;
+			 this.codigo_ = '0';
+
+			}else{
+this.ionicFlagNovo = true;
+			 this.codigo = 0;
+			 this.codigo_ = '0';
+
+		}
+			}
+
+
+		}
+
+}
 
