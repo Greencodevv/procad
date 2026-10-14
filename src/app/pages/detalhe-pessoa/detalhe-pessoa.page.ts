@@ -16,105 +16,178 @@ import { Geolocation } from '@capacitor/geolocation';
 export class DetalhePessoaPage {
     objVisita = servico.visita
     listaStatus = new VisitaRecadastramento(null).flagConcluidoFormatadoLista;
+    listaObsOpcoes = new VisitaRecadastramento(null).obsOpcoesFormatadoLista;
     usuarioLogado = servico.usuarioLogado
-    arquivo = servico.arquivo;
+    arquivo: ArquivoProcad = null;
     arquivos = [];
     filesArr: ArtefatoCras[] = [];
-    codigoArquivo: any;
 
     constructor(private loadingService: LoadingService, private router: Router, private toastService: ToastService) {
-
+        // Força o usuário a escolher o status antes de salvar
+        this.objVisita.flagConcluido = null;
     }
 
     async ionViewDidEnter() {
-        await this.loadingService.present();
-        const location = await Geolocation.getCurrentPosition({
-            enableHighAccuracy: true
-        });
-        this.objVisita.latitude = location.coords.latitude.toString();
-        this.objVisita.longitude = location.coords.longitude.toString();
-        this.loadingService.dismiss();
+        try {
+            await this.loadingService.present();
+            const location = await Geolocation.getCurrentPosition({
+                enableHighAccuracy: true,
+                timeout: 15000
+            });
+            this.objVisita.latitude = location.coords.latitude.toString();
+            this.objVisita.longitude = location.coords.longitude.toString();
+        } catch (error) {
+            console.error(error);
+            this.toastService.showToast({ message: 'Não foi possível obter a localização. Verifique o GPS e a permissão.' });
+        } finally {
+            this.loadingService.dismiss();
+        }
+    }
+
+    converteValor(ev: any) {
+        this.objVisita.visitado.flagNaoUnipessoalSimNao = ev.detail.value === 1 ? 1 : 0;
     }
 
     async finalizarVisita() {
-        await this.loadingService.present();
-        const recadastrado = this.objVisita.visitado;
-        const visita = new VisitaRecadastramento(this.objVisita);
-        visita.responsavelVisita = this.usuarioLogado;
-        visita.flagConcluido = this.objVisita.flagConcluido;
-        recadastrado.flagRecadastrado = this.objVisita.flagConcluido;
-        visita.arquivos = [this.arquivo];
-        const pessoa = new RecadastramentoCamaragibe(recadastrado);
-        pessoa.visitas.push(visita);
-
-        if (visita.flagConcluido != 3) {
-            const recadastramento = Mentor.rodaTransacaoFromObjeto(2003, 'objRecadastramento', pessoa, true);
-            this.loadingService.dismiss();
-            if (recadastramento) {
-                this.toastService.showToast({ message: 'Visita finalizada com sucesso!' });
-                this.router.navigate(['/inicio']);
-            }
-        } else {
-            this.loadingService.dismiss();
+        if (this.objVisita.flagConcluido == null) {
             this.toastService.showToast({ message: 'Status da visita é obrigatório' });
+            return;
+        }
+        if (!this.arquivo) {
+            this.toastService.showToast({ message: 'Adicione a foto da visita antes de salvar' });
+            return;
+        }
+
+        try {
+            await this.loadingService.present();
+            const recadastrado = this.objVisita.visitado;
+            const visita = new VisitaRecadastramento(this.objVisita);
+            visita.responsavelVisita = this.usuarioLogado;
+            visita.flagConcluido = this.objVisita.flagConcluido;
+            recadastrado.flagRecadastrado = this.objVisita.flagConcluido;
+            visita.arquivos = [this.arquivo];
+            const pessoa = new RecadastramentoCamaragibe(recadastrado);
+            pessoa.visitas.push(visita);
+
+            const recadastramento = Mentor.rodaTransacaoFromObjeto(2003, 'objRecadastramento', pessoa, true);
+            if (!recadastramento) {
+                throw new Error('Retorno vazio ao salvar a visita');
+            }
+
+            // A visita já está salva: se a numeração falhar, avisa sem pedir para salvar de novo
+            const numeroOrdem = this.geraNumeroOrdem(visita.codigo);
+            if (numeroOrdem == null) {
+                this.toastService.showToast({ message: 'Visita salva, mas não foi possível gerar o número de ordem.' });
+                this.router.navigate(['/inicio']);
+                return;
+            }
+
+            this.toastService.showToast({ message: `Número de ordem ${numeroOrdem}!`, cssClass: 'toast-success' });
+            this.router.navigate(['/inicio']);
+        } catch (error) {
+            console.error(error);
+            this.toastService.showToast({ message: 'Não foi possível salvar a visita. Tente novamente.' });
+        } finally {
+            this.loadingService.dismiss();
+        }
+    }
+
+    // O número é gerado no servidor (sequência do banco) para ser único entre todos os aparelhos
+    geraNumeroOrdem(codigoVisita: number): number | null {
+        if (!codigoVisita) {
+            return null;
+        }
+        try {
+            const retornoJsp: any = Mentor.bind(
+                'codigoVisita=' + codigoVisita,
+                'jsp/appProcad/numeroOrdem.jsp',
+                'POST'
+            );
+            const retorno = JSON.parse(retornoJsp);
+            if (retorno.erro || retorno.numeroOrdem == null) {
+                console.error('Erro ao gerar numeroOrdem:', retorno.erro);
+                return null;
+            }
+            return retorno.numeroOrdem;
+        } catch (error) {
+            console.error(error);
+            return null;
         }
     }
 
     async handleOpenCamera(documentName: string) {
+        let cameraResults: Photo;
         try {
-            const cameraResults: Photo = await Camera.getPhoto({
+            cameraResults = await Camera.getPhoto({
                 quality: 90,
                 allowEditing: false,
                 resultType: CameraResultType.Base64,
                 source: CameraSource.Camera,
             });
+        } catch (error) {
+            // Usuário cancelou a câmera ou negou a permissão
+            console.error(error);
+            return;
+        }
 
-            const image = "data:image/jpeg;base64," + cameraResults.base64String;
-
-            var artefato: ArtefatoCras = new ArtefatoCras(null)
-            artefato.base64 = image;
-            this.filesArr.push(artefato);
+        try {
+            await this.loadingService.present({ message: 'Enviando foto' });
 
             const arquivo = new ArquivoProcad(null);
             arquivo.nome = documentName + "_" + this.objVisita.visitado.nome;
             arquivo.flagUploadArquivo = 1;
 
-
             const arquivoUpado = Mentor.rodaTransacaoFromObjeto(2007, 'objArquivo', arquivo, true);
-            this.arquivo = arquivoUpado['ArquivoProcad'];
-            this.codigoArquivo = arquivoUpado['ArquivoProcad'].codigo;
+            const arquivoProcad = arquivoUpado['ArquivoProcad'];
 
-            const file = await this.photoToFile(cameraResults);
+            const file = this.photoToFile(cameraResults, arquivoProcad.nome.toString());
 
             const formData = new FormData();
             formData.append('transacaoMentor', '244');
             formData.append('classe', 'br.com.assistenciaSocial.beans.ArquivoProcad');
             formData.append('tipo', 'Arquivo');
-            formData.append('id', String(this.codigoArquivo));
+            formData.append('id', String(arquivoProcad.codigo));
             formData.append('codigo', String(this.usuarioLogado.codigo));
             formData.append('parametrosExtra', '');
             formData.append('arquivo', file);
 
+            await this.enviaArquivo(formData);
+
+            // Só libera o "Salvar Visita" depois que o upload foi confirmado pelo servidor
+            this.arquivo = arquivoProcad;
+            const artefato: ArtefatoCras = new ArtefatoCras(null);
+            artefato.base64 = "data:image/jpeg;base64," + cameraResults.base64String;
+            this.filesArr.push(artefato);
+        } catch (error) {
+            console.error(error);
+            this.arquivo = null;
+            this.toastService.showToast({ message: 'Não foi possível enviar a foto. Tente novamente.' });
+        } finally {
+            this.loadingService.dismiss();
+        }
+    }
+
+    enviaArquivo(formData: FormData): Promise<void> {
+        return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
 
             xhr.open(
                 'POST',
-                'https://camaragibe.conectasuas.com.br/assistenciaSocial/uploadProcad',
+                'https://abreuelima.conectasuas.com.br/assistenciaSocial/uploadProcad',
                 true
             );
 
             xhr.onload = () => {
-                console.log('Resposta:', xhr.responseText);
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    resolve();
+                } else {
+                    reject(new Error('Erro no upload: ' + xhr.status + ' ' + xhr.responseText));
+                }
             };
 
-            xhr.onerror = () => {
-                console.error('Erro no upload' + xhr.status);
-            };
+            xhr.onerror = () => reject(new Error('Falha de rede no upload'));
             xhr.send(formData);
-
-        } catch (error) {
-            console.error(error);
-        }
+        });
     }
 
     base64ToBlob(base64: string, contentType = '', sliceSize = 512): Blob {
@@ -137,17 +210,16 @@ export class DetalhePessoaPage {
     }
 
     goBack() {
-        this.objVisita = null;
         this.router.navigate(['/inicio']);
     }
 
 
-    async photoToFile(photo: Photo): Promise<File> {
+    photoToFile(photo: Photo, nome: string): File {
         const blob = this.base64ToBlob(photo.base64String!, 'image/jpeg');
 
         return new File(
             [blob],
-            this.arquivo.nome.toString(),
+            nome,
             { type: 'image/jpeg' }
         );
     }

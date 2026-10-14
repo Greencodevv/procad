@@ -8,14 +8,32 @@
             <p class="page-subtitle">Preencha as informações da visita</p>
         </div>
 
-        <ion-label class="loja-content">
-            <ion-input [(ngModel)]="objVisita.obs" placeholder="Informações adicionais..."></ion-input>
-            <ion-select labelPlacement="stacked" placeholder="Status da visita" [(ngModel)]="objVisita.flagConcluido">
-                <ion-select-option *ngFor="let status of listaStatus"
-                    [value]="status.de">{{status.para}}</ion-select-option>
-            </ion-select>
-        </ion-label>
-
+        <ion-list class="lojas-list" lines="none">
+            <ion-item class="loja-item">
+                <ion-icon name="checkmark-done-outline" slot="start" class="loja-icon"></ion-icon>
+                <ion-select placeholder="Status da visita" [(ngModel)]="objVisita.flagConcluido" interface="popover">
+                    <ion-select-option *ngFor="let status of listaStatus"
+                        [value]="status.de">{{status.para}}</ion-select-option>
+                </ion-select>
+            </ion-item>
+            <ion-item class="loja-item">
+                <ion-icon name="list-outline" slot="start" class="loja-icon"></ion-icon>
+                <ion-select placeholder="Observação da visita (opcional)" [(ngModel)]="objVisita.obsOpcoes" interface="action-sheet">
+                    <ion-select-option *ngFor="let opcao of listaObsOpcoes"
+                        [value]="opcao.de">{{opcao.para}}</ion-select-option>
+                </ion-select>
+            </ion-item>
+            <ion-item class="loja-item">
+                <ion-icon name="create-outline" slot="start" class="loja-icon"></ion-icon>
+                <ion-input [(ngModel)]="objVisita.obs" placeholder="Informações adicionais..."></ion-input>
+            </ion-item>
+            <ion-item lines="none" class="loja-item radio-item">
+                <ion-radio-group slot="start" [ngModel]="objVisita.visitado.flagNaoUnipessoalSimNao" (ionChange)="converteValor($event)" [allowEmptySelection]="true">
+                    <ion-radio [value]="1" class="radio-option"></ion-radio>
+                </ion-radio-group>
+                <ion-label>Não é unipessoal</ion-label>
+            </ion-item>
+        </ion-list>
         <ion-list *ngIf="filesArr.length > 0" style="margin-top: 24px;">
             <ion-item *ngFor="let file of filesArr" lines="none">
                 <img [src]="file.base64" alt="Foto" style="max-width: 100%; max-height: 100%; border-radius: 20px;" />
@@ -37,7 +55,8 @@
             </ion-col>
         </ion-row>
     </div>
-    <div class="footer-content">
-        <img src="../../../assets/icon/1.jpeg" alt="Footer Illustration" style="width: 100%; max-width: 120px; display: block; margin: 0 auto;"/>
-    </div>
+    <!-- <div class="footer-content">
+        <img src="../../../assets/icon/1.jpeg" alt="Footer Illustration"
+            style="width: 100%; max-width: 120px; display: block; margin: 0 auto;" />
+    </div> -->
 </ion-content>
