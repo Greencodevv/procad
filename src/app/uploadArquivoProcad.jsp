@@ -29,7 +29,9 @@ System.out.println("up -- " + tm + "-");
 } 
 }catch(Exception e){
 	e.printStackTrace();
-	
+	// Devolve erro para o app não liberar o salvamento da visita sem a foto
+	response.setStatus(500);
+	out.println("erro " + e.getMessage());
 }
 
 

@@ -36,10 +36,10 @@
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 // @import "@ionic/angular/css/palettes/dark.system.css";
 
-ion-button {
-    --background: linear-gradient(to top, #0071bb, #4f9fc9) !important;
-    //--background: #f4136b;
-    --background-hover: transparent !important;
-    --background-activated: transparent !important;
-    --background-focused: transparent !important;
+ion-button:not([color]),
+ion-button[color="primary"] {
+    --background: linear-gradient(to top, var(--ion-color-primary-shade), #4f9fc9);
+    --background-hover: transparent;
+    --background-activated: transparent;
+    --background-focused: transparent;
   }

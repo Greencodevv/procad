@@ -1,0 +1,43 @@
+<ion-content class="lojas-content">
+  <div class="lojas-container">
+    <div class="page-header">
+      <div class="header-content">
+        <h1 class="page-title">Números de ordem</h1>
+        <ion-badge color="light" class="count-badge">{{ ordens.length }}</ion-badge>
+      </div>
+      <p class="page-subtitle">Gerados a partir das suas visitas</p>
+    </div>
+
+    @if (ordens.length > 0) {
+    <ion-list class="lojas-list" lines="none">
+      @for (ordem of ordens; track ordem.codigoVisita) {
+      <ion-item class="loja-item">
+        <div class="numero-ordem" slot="start">{{ ordem.numeroOrdem }}</div>
+        <ion-label class="loja-content">
+          <h2 class="loja-name">{{ ordem.nome }}</h2>
+          <div class="loja-details">
+            @if (ordem.endereco) {
+            <p class="loja-address">
+              <ion-icon name="location-outline" class="detail-icon"></ion-icon>
+              <span>{{ ordem.endereco }}</span>
+            </p>
+            }
+            @if (ordem.dataVisita) {
+            <p class="loja-address">
+              <ion-icon name="calendar-outline" class="detail-icon"></ion-icon>
+              <span>{{ ordem.dataVisita }}</span>
+            </p>
+            }
+          </div>
+        </ion-label>
+      </ion-item>
+      }
+    </ion-list>
+    } @else if (carregou) {
+    <div class="empty-state">
+      <ion-icon name="document-text-outline" class="empty-icon"></ion-icon>
+      <p class="empty-message">Nenhum número de ordem gerado ainda</p>
+    </div>
+    }
+  </div>
+</ion-content>

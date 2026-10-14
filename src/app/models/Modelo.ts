@@ -1,6 +1,6 @@
 
 
-// codigo gerado automaticamente pelo mentor transacao 1881
+// codigo gerado automaticamente pelo mentor transacao 2000
 
 import { Mentor } from '../models/Mentor'
 import { servico } from '../models/Servico';
@@ -907,7 +907,6 @@ export class RlcFuncionarioUnidade extends ionicClasseBase {
 
 }
 
-
 export class RecadastramentoCamaragibe extends ionicClasseBase {
 public static mentorNomeClasse = 'br.com.assistenciaSocial.beans.RecadastramentoCamaragibe';
 
@@ -969,17 +968,25 @@ public static mentorNomeClasse = 'br.com.assistenciaSocial.beans.Recadastramento
 		public flagRecadastradoFormatadoLista : formatadoLista[] = new Array();
 		get flagRecadastradoFormatado(){  return Mentor.formatadoLista(this.flagRecadastradoFormatadoLista,this.flagRecadastrado);}
 
+
+		public flagNaoUnipessoalSimNao : number = 0 ;
+		public flagNaoUnipessoalSimNao_ : String ;
+		get flagNaoUnipessoalSimNaoSimNao(){ if (this.flagNaoUnipessoalSimNao == 1) return true; else return false;}
+		set flagNaoUnipessoalSimNaoSimNao(flag){ if (flag) this.flagNaoUnipessoalSimNao = 1; else this.flagNaoUnipessoalSimNao = 0;}
+		public flagNaoUnipessoalSimNaoFormatadoLista : formatadoLista[] = new Array();
+		get flagNaoUnipessoalSimNaoFormatado(){  return Mentor.formatadoLista(this.flagNaoUnipessoalSimNaoFormatadoLista,this.flagNaoUnipessoalSimNao);}
+
 		public visitas : VisitaRecadastramento[] ;
 		public bairroSistema : Bairro ;
 
-public listaAtributosKodefy: Array<string> ='codigo#nome#cpf#endereco#bairro#pontoReferencia#telefone#obs#cras#flagRecadastrado#'.split('#');
+public listaAtributosKodefy: Array<string> ='codigo#nome#cpf#endereco#bairro#pontoReferencia#telefone#obs#cras#flagRecadastrado#flagNaoUnipessoalSimNao#'.split('#');
 		constructor(objeto:any){
 		super();
 		if(objeto != null && objeto != 'null'){
 if(typeof(objeto.ionicFlagNovo) == 'undefined') this.ionicFlagNovo = false; else this.ionicFlagNovo = objeto.ionicFlagNovo;
 this.idApp = objeto.idApp;
 this.nomeApp = objeto.nomeApp;
-			 this.codigo = objeto.codigo;
+			 this.codigo = objeto.codigo
 			 this.codigo_ = Mentor.intToString(this.codigo);
 			 this.nome = objeto.nome;
 			 this.cpf = objeto.cpf;
@@ -992,6 +999,8 @@ this.nomeApp = objeto.nomeApp;
 			 this.cras_ = Mentor.intToString(this.cras);
 			 this.flagRecadastrado = objeto.flagRecadastrado;
 			 this.flagRecadastrado_ = Mentor.intToString(this.flagRecadastrado);
+			 this.flagNaoUnipessoalSimNao = objeto.flagNaoUnipessoalSimNao;
+			 this.flagNaoUnipessoalSimNao_ = Mentor.intToString(this.flagNaoUnipessoalSimNao);
 				this.visitas = new Array();
 
 			if(objeto.visitas != null){
@@ -1001,6 +1010,7 @@ this.nomeApp = objeto.nomeApp;
 
 			if(objeto.bairroSistema != null)
 				this.bairroSistema = new Bairro(objeto.bairroSistema);
+
 		}
 		else{
 		if((objeto) == 'null'){
@@ -1011,6 +1021,8 @@ this.ionicFlagNovo = true;
 			 this.cras_ = '0';
 			 this.flagRecadastrado = 0;
 			 this.flagRecadastrado_ = '0';
+			 this.flagNaoUnipessoalSimNao = 0;
+			 this.flagNaoUnipessoalSimNao_ = '0';
 
 			}else{
 this.ionicFlagNovo = true;
@@ -1020,6 +1032,8 @@ this.ionicFlagNovo = true;
 			 this.cras_ = '0';
 			 this.flagRecadastrado = 0;
 			 this.flagRecadastrado_ = '0';
+			 this.flagNaoUnipessoalSimNao = 0;
+			 this.flagNaoUnipessoalSimNao_ = '0';
 				this.bairroSistema = new Bairro('null');
 
 		}
@@ -1028,11 +1042,16 @@ this.ionicFlagNovo = true;
 			this.crasFormatadoLista.push(new formatadoLista(1,"CRAS 1"));
 			this.crasFormatadoLista.push(new formatadoLista(2,"CRAS 2"));
 			this.crasFormatadoLista.push(new formatadoLista(3,"CRAS 3"));
-			this.flagRecadastradoFormatadoLista.push(new formatadoLista(0,"Não atendido"));
-			this.flagRecadastradoFormatadoLista.push(new formatadoLista(1,"Atendido"));
+			this.crasFormatadoLista.push(new formatadoLista(4,"CRAS 4"));
+			this.crasFormatadoLista.push(new formatadoLista(5,"CRAS 5"));
+			this.crasFormatadoLista.push(new formatadoLista(6,"Casa da Cidadania"));
+			this.flagRecadastradoFormatadoLista.push(new formatadoLista(0,"Não entrevistado"));
+			this.flagRecadastradoFormatadoLista.push(new formatadoLista(1,"Entrevistado"));
 			this.flagRecadastradoFormatadoLista.push(new formatadoLista(2,"Negada"));
 			this.flagRecadastradoFormatadoLista.push(new formatadoLista(3,"Sem agendamento"));
 			this.flagRecadastradoFormatadoLista.push(new formatadoLista(4,"Agendado"));
+			this.flagNaoUnipessoalSimNaoFormatadoLista.push(new formatadoLista(0,"Não"));
+			this.flagNaoUnipessoalSimNaoFormatadoLista.push(new formatadoLista(1,"Sim"));
 
 		}
 
@@ -1101,6 +1120,14 @@ public static mentorNomeClasse = 'br.com.assistenciaSocial.beans.VisitaRecadastr
 
 		public longitude : String = '' ;
 		public longitude_ : String ;
+
+		public obsOpcoes : number = 0 ;
+		public obsOpcoes_ : String ;
+		get obsOpcoesSimNao(){ if (this.obsOpcoes == 1) return true; else return false;}
+		set obsOpcoesSimNao(flag){ if (flag) this.obsOpcoes = 1; else this.obsOpcoes = 0;}
+		public obsOpcoesFormatadoLista : formatadoLista[] = new Array();
+		get obsOpcoesFormatado(){  return Mentor.formatadoLista(this.obsOpcoesFormatadoLista,this.obsOpcoes);}
+
 		public responsavelVisita : Funcionarios ;
 		public arquivos : ArquivoProcad[] ;
 		public visitado : RecadastramentoCamaragibe ;
@@ -1129,6 +1156,8 @@ else{
 			 this.obs = objeto.obs;
 			 this.latitude = objeto.latitude;
 			 this.longitude = objeto.longitude;
+			 this.obsOpcoes = objeto.obsOpcoes;
+			 this.obsOpcoes_ = Mentor.intToString(this.obsOpcoes);
 
 			if(objeto.responsavelVisita != null)
 				this.responsavelVisita = new Funcionarios(objeto.responsavelVisita);
@@ -1152,6 +1181,8 @@ this.ionicFlagNovo = true;
 			 this.flagConcluido_ = '0';
 			 this.dataVisita = new Date();
 			 this.dataVisita_ = (this.dataVisitaFormatado) ;
+			 this.obsOpcoes = 0;
+			 this.obsOpcoes_ = '0';
 
 			}else{
 this.ionicFlagNovo = true;
@@ -1161,15 +1192,25 @@ this.ionicFlagNovo = true;
 			 this.flagConcluido_ = '0';
 			 this.dataVisita = new Date();
 			 this.dataVisita_ = (this.dataVisitaFormatado) ;
+			 this.obsOpcoes = 0;
+			 this.obsOpcoes_ = '0';
 				this.responsavelVisita = new Funcionarios('null');
 				this.visitado = new RecadastramentoCamaragibe('null');
 
 		}
 			}
 
-			this.flagConcluidoFormatadoLista.push(new formatadoLista(0,"Não realizada"));
-			this.flagConcluidoFormatadoLista.push(new formatadoLista(1,"Realizada"));
+			this.flagConcluidoFormatadoLista.push(new formatadoLista(0,"Não entrevistado"));
+			this.flagConcluidoFormatadoLista.push(new formatadoLista(1,"Entrevistado"));
 			this.flagConcluidoFormatadoLista.push(new formatadoLista(2,"Negada"));
+			this.obsOpcoesFormatadoLista.push(new formatadoLista(1,"Morador ausente no momento da visita"));
+			this.obsOpcoesFormatadoLista.push(new formatadoLista(2,"Endereço não localizado"));
+			this.obsOpcoesFormatadoLista.push(new formatadoLista(3,"Mudou-se do endereço informado"));
+			this.obsOpcoesFormatadoLista.push(new formatadoLista(4,"Pessoa não reside no endereço informado"));
+			this.obsOpcoesFormatadoLista.push(new formatadoLista(5,"Imóvel aparentemente abandonado"));
+			this.obsOpcoesFormatadoLista.push(new formatadoLista(6,"Recusa de atendimento"));
+			this.obsOpcoesFormatadoLista.push(new formatadoLista(7,"Impossibilidade de acesso ao imóvel"));
+			this.obsOpcoesFormatadoLista.push(new formatadoLista(8,"Outros motivos (especificar)"));
 
 		}
 

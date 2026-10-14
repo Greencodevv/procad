@@ -1,0 +1,11 @@
+ion-tab-bar {
+  --border: 1px solid rgba(0, 0, 0, 0.08);
+  padding-top: 0.25rem;
+}
+
+ion-tab-button {
+  --color: var(--ion-color-medium);
+  --color-selected: var(--ion-color-primary);
+  font-weight: 600;
+  text-transform: none;
+}

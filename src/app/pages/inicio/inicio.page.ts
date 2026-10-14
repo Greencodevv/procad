@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs';
 import { Mentor } from 'src/app/models/Mentor';
 import { servico } from 'src/app/models/Servico';
 
@@ -10,18 +12,24 @@ import { servico } from 'src/app/models/Servico';
 })
 export class InicioPage {
   visitas = servico.visitas;
-  usuarioLogadoCodigo = servico.usuarioLogado.codigo;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {
+    // Dentro das tabs o ionViewDidEnter não dispara ao voltar do detalhe, então recarrega a cada navegação para /inicio
+    this.router.events.pipe(
+      filter((e): e is NavigationEnd => e instanceof NavigationEnd && e.urlAfterRedirects.startsWith('/inicio')),
+      takeUntilDestroyed()
+    ).subscribe(() => this.carregarVisitas());
+  }
 
-  async ionViewDidEnter() {
+  carregarVisitas() {
     const retornoJsp: any = Mentor.bind(
-      'codigoEntrevistador=' + this.usuarioLogadoCodigo,
+      'codigoEntrevistador=' + servico.usuarioLogado.codigo,
       'jsp/appProcad/ctrl.jsp',
       'POST'
     );
     const objJsp = JSON.parse(retornoJsp);
     this.visitas = JSON.parse(objJsp['visitas']);
+    console.log('Visitas:', this.visitas);
   }
 
   navegaParaLogin() {

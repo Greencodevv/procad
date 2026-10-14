@@ -71,12 +71,9 @@
   justify-content: center;
   display: flex;
   height: 120px;
+  padding-bottom: env(safe-area-inset-bottom);
   align-items: center;
   background: #f5f7fa;
-}
-
-.troca {
-  --background: linear-gradient(to top, #0071bb, #b3f2fb) !important;
 }
 
 .lojas-content {
@@ -84,7 +81,7 @@
   --padding-start: 0;
   --padding-end: 0;
   --padding-top: 0;
-  --padding-bottom: 80px;
+  --padding-bottom: 130px;
   padding: 10px;
 }
 
@@ -95,7 +92,7 @@
 
 .page-header {
   background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-primary-shade) 100%);
-  padding: 2rem 1.5rem 1.5rem;
+  padding: calc(2rem + env(safe-area-inset-top)) 1.5rem 1.5rem;
   margin: -1rem -1rem 1.5rem -1rem;
   border-radius: 0 0 24px 24px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);

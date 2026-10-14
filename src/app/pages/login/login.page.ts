@@ -145,9 +145,7 @@ export class LoginPage {
 
     this.usuarioLogado = usuarioLogado;
 
-    const { cpf, senha } = usuarioLogado;
-
-    this.loginForm.setValue({ usuario: cpf, senha });
+    this.loginForm.patchValue({ usuario: usuarioLogado.cpf });
   }
 
   async realizaLogin() {
@@ -162,10 +160,9 @@ export class LoginPage {
       const usuario = Mentor.executaVisao(
         3215,
         'varlogi=' +
-          this.usuario.value?.replace(/\D/g, '') +
+          encodeURIComponent(this.usuario.value?.replace(/\D/g, '')) +
           '&varsenha=' +
-          this.senha.value
-          + '&MwExibeSql=true'
+          encodeURIComponent(this.senha.value)
       );
 
       if (!usuario) {
@@ -173,11 +170,13 @@ export class LoginPage {
         return;
       }
 
+      const { senha, ...usuarioSemSenha } = usuario;
+
       await this.storageService.setValue(
-        StorageKeysEnums.usuarioLogado, usuario
+        StorageKeysEnums.usuarioLogado, usuarioSemSenha
       );
 
-      servico.usuarioLogado = usuario;
+      servico.usuarioLogado = usuarioSemSenha;
 
       this.navCtrl.navigateRoot('inicio');
     } catch (error) {

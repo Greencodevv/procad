@@ -15,7 +15,7 @@
         <ion-list class="lojas-list" lines="none">
           <ion-item class="loja-item">
             <ion-icon name="person-outline" slot="start" class="loja-icon"></ion-icon>
-            <ion-input placeholder="Usuário (CPF)" formControlName="usuario" maxlength="14" [maskito]="cpfMask"
+            <ion-input placeholder="Usuário (CPF)" formControlName="usuario" autocomplete="off" maxlength="14" [maskito]="cpfMask"
               [maskitoElement]="maskPredicate" type="tel" required></ion-input>
           </ion-item>
           <ion-note color="danger" class="form-error-message"
@@ -24,7 +24,7 @@
           </ion-note>
           <ion-item class="loja-item">
             <ion-icon name="lock-closed-outline" slot="start" class="loja-icon"></ion-icon>
-            <ion-input placeholder="Senha" formControlName="senha" type="password" required></ion-input>
+            <ion-input placeholder="Senha" formControlName="senha" type="password" autocomplete="new-password" required></ion-input>
           </ion-item>
           <ion-note color="danger" class="form-error-message"
             *ngIf="senha?.hasError('required') && (senha?.dirty || senha?.touched)">
@@ -49,7 +49,7 @@
       </form>
     </div>
   </div>
-  <div class="footer-content">
+  <!-- <div class="footer-content">
     <img src="../../../assets/icon/1.jpeg" alt="Footer Illustration" style="width: 100%; max-width: 120px; display: block; margin: 0 auto;"/>
-  </div>
+  </div> -->
 </ion-content>

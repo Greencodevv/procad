@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { authGuard, visitaSelecionadaGuard } from './shared/guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -19,12 +20,15 @@ const routes: Routes = [
     loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
   },
   {
-    path: 'inicio',
-    loadChildren: () => import('./pages/inicio/inicio.module').then( m => m.InicioPageModule)
+    path: 'detalhe-pessoa',
+    canActivate: [authGuard, visitaSelecionadaGuard],
+    loadChildren: () => import('./pages/detalhe-pessoa/detalhe-pessoa.module').then(m => m.DetalhePessoaPageModule)
   },
   {
-    path: 'detalhe-pessoa',
-    loadChildren: () => import('./pages/detalhe-pessoa/detalhe-pessoa.module').then(m => m.DetalhePessoaPageModule)
+    // Abas "Visitas" (/inicio) e "Números de ordem" (/numeros-ordem)
+    path: '',
+    canActivate: [authGuard],
+    loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule)
   },
 ];
 

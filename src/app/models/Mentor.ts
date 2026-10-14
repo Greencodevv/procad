@@ -486,7 +486,7 @@ export class Mentor {
     return Mentor.executaTransacaoModulo(
       null,
       transacao,
-      nomeCampo + '=' + palavra + ''
+      nomeCampo + '=' + encodeURIComponent(palavra)
     );
   }
 
