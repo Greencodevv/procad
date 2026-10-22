@@ -3,33 +3,56 @@
     <div class="page-header">
       <div class="header-content">
         <h1 class="page-title">Visitas</h1>
-        <ion-badge color="primary" class="count-badge">{{ visitas?.length || 0 }}</ion-badge>
+        <ion-badge color="primary" class="count-badge">{{ itens.length }}</ion-badge>
       </div>
       <p class="page-subtitle">Gerencie suas visitas</p>
     </div>
 
-    @if (visitas && visitas.length > 0) {
+    <div class="mapa-container">
+      <div #mapa class="mapa-visitas"></div>
+      <p class="status-localizacao">
+        <ion-icon name="locate-outline"></ion-icon>
+        <span>{{ statusLocalizacao }}</span>
+      </p>
+    </div>
+
+    @if (itens.length > 0) {
     <ion-list class="lojas-list" lines="none">
-      @for (visita of visitas; track visita.codigo) {
-      <ion-item (click)="abrirDetalhe(visita)" button="true" class="loja-item">
-        <div class="loja-icon-wrapper" slot="start">
-          <ion-icon name="storefront-outline" class="loja-icon"></ion-icon>
+      @for (item of itens; track item.visita.codigo) {
+      <ion-item (click)="abrirOpcoes(item)" button="true" class="loja-item">
+        <div class="loja-icon-wrapper ordem-wrapper" slot="start">
+          <span class="ordem-badge">{{ item.ordem }}</span>
         </div>
         <ion-label class="loja-content">
-          <h2 class="loja-name">{{ visita.visitado.nome }}</h2>
+          <h2 class="loja-name">{{ item.visita.visitado.nome }}</h2>
           <div class="loja-details">
-            <p class="loja-address">
-              <ion-icon name="location-outline" class="detail-icon"></ion-icon>
-              <span><strong>Endereço:</strong> {{ visita.visitado.endereco }}</span>
+            <p class="loja-cpf">
+              <ion-icon name="card-outline" class="detail-icon"></ion-icon>
+              <span><strong>CPF:</strong> {{ formatarCpf(item.visita.visitado.cpf) }}</span>
             </p>
             <p class="loja-address">
               <ion-icon name="location-outline" class="detail-icon"></ion-icon>
-              <span><strong>Ponto de Referência:</strong> {{ visita.visitado.pontoReferencia }}</span>
+              <span><strong>Endereço:</strong> {{ item.visita.visitado.endereco }}</span>
             </p>
-            @if (visita.visitado.bairroSistema) {
+            <p class="loja-address">
+              <ion-icon name="location-outline" class="detail-icon"></ion-icon>
+              <span><strong>Ponto de Referência:</strong> {{ item.visita.visitado.pontoReferencia }}</span>
+            </p>
+            @if (item.visita.visitado.bairroSistema) {
             <p class="loja-email">
               <ion-icon name="mail-outline" class="detail-icon"></ion-icon>
-              <span>{{ visita.visitado.bairroSistema.nome }}</span>
+              <span>{{ item.visita.visitado.bairroSistema.nome }}</span>
+            </p>
+            }
+            @if (item.distanciaKm !== null) {
+            <p class="loja-distancia">
+              <ion-icon name="navigate-outline" class="detail-icon"></ion-icon>
+              <span>{{ formatarDistancia(item.distanciaKm) }} de você</span>
+            </p>
+            } @else if (!item.coordenada) {
+            <p class="loja-sem-mapa">
+              <ion-icon name="alert-circle-outline" class="detail-icon"></ion-icon>
+              <span>Sem coordenadas no mapa</span>
             </p>
             }
           </div>

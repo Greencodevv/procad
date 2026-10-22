@@ -1,6 +1,6 @@
 {
   "/assistenciaSocial/jsp/uploadArquivoProcad.jsp": {
-    "target": "https://camaragibe.conectasuas.com.br",
+    "target": "https://abreuelima.conectasuas.com.br",
     "secure": false,
     "changeOrigin": true
   }

@@ -144,6 +144,71 @@
   margin-top: 0.15rem;
 }
 
+// Mapa de visitas
+.mapa-container {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  padding: 0.5rem 0.5rem 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.mapa-visitas {
+  width: 100%;
+  height: 260px;
+  border-radius: 12px;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.status-localizacao {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.5rem 0 0;
+  font-size: 0.8rem;
+  color: #718096;
+
+  ion-icon {
+    color: var(--ion-color-primary);
+    font-size: 1rem;
+  }
+}
+
+// Número de ordem da visita (mesmo número do marcador no mapa)
+.ordem-wrapper {
+  background: var(--ion-color-primary);
+  box-shadow: 0 4px 12px rgba(var(--ion-color-primary-rgb), 0.3);
+}
+
+.ordem-badge {
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.loja-cpf,
+.loja-distancia,
+.loja-sem-mapa {
+  font-size: 0.875rem;
+  color: #718096;
+  margin: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  line-height: 1.5;
+}
+
+.loja-distancia {
+  color: var(--ion-color-primary);
+  font-weight: 600;
+}
+
+.loja-sem-mapa {
+  color: var(--ion-color-medium);
+  font-style: italic;
+}
+
 // Estado vazio
 .empty-state {
   display: flex;
